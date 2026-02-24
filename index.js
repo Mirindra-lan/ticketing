@@ -25,17 +25,17 @@ const server = http.createServer((req, res) => {
     dockerLogs.stdout.on("data", (data) => {
         const lines = data.toString().split("\n");
         lines.forEach(line => {
-            if(line.includes[patterns[0]]){
+            if(line.includes([patterns[0]])){
                 let cleanData = line.split(patterns[0])[1]
                 cleanData = "Call starting"
                 res.write(cleanData + "\n")
             }
-            if(line.includes[patterns[1]]){
+            if(line.includes([patterns[1]])){
                 let cleanData = line.split(patterns[1])[1]
                 cleanData = "Bot:" + cleanData
                 res.write(cleanData + "\n")
             }
-            if(line.includes[patterns[2]]){
+            if(line.includes([patterns[2]])){
                 let cleanData = line.split(patterns[2])[1]
                 cleanData = "User:" + cleanData
                 res.write(cleanData + "\n")
