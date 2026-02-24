@@ -8,7 +8,8 @@ const dockerContainer = "avr-core-google-10";
 // Les patterns à filtrer
 const patterns = [
   "Received data from external asr service",
-  "Sends text from LLM to TTS"
+  "Sends text from LLM to TTS",
+  "UUID packet received"
 ];
 
 // On crée le serveur HTTP
