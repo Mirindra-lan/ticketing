@@ -14,54 +14,55 @@ const patterns = [
 
 // On crée le serveur HTTP
 const server = http.createServer((req, res) => {
-  res.writeHead(200, {
-    "Content-Type": "text/plain; charset=utf-8",
-    "Transfer-Encoding": "chunked" // permet le streaming
-  });
+    res.writeHead(200, {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Transfer-Encoding": "chunked" // permet le streaming
+    });
 
   // On spawn docker logs en streaming pour ce client
-  const dockerLogs = spawn("docker", ["logs", "-f", dockerContainer]);
+    const dockerLogs = spawn("docker", ["logs", "-f", dockerContainer]);
 
-  dockerLogs.stdout.on("data", (data) => {
-    const lines = data.toString().split("\n");
-    lines.forEach(line => {
-        if(line.includes[patterns[0]]){
-            let cleanData = line.split(patterns[0])[1]
-            cleanData = "Call starting"
-            res.write(cleanData + "\n")
-        }
-        if(line.includes[patterns[1]]){
-            let cleanData = line.split(patterns[1])[1]
-            cleanData = "Bot:" + cleanData
-            res.write(cleanData + "\n")
-        }
-        if(line.includes[patterns[2]]){
-            let cleanData = line.split(patterns[2])[1]
-            cleanData = "User:" + cleanData
-            res.write(cleanData + "\n")
-        }
+    dockerLogs.stdout.on("data", (data) => {
+        const lines = data.toString().split("\n");
+        lines.forEach(line => {
+            if(line.includes[patterns[0]]){
+                let cleanData = line.split(patterns[0])[1]
+                cleanData = "Call starting"
+                res.write(cleanData + "\n")
+            }
+            if(line.includes[patterns[1]]){
+                let cleanData = line.split(patterns[1])[1]
+                cleanData = "Bot:" + cleanData
+                res.write(cleanData + "\n")
+            }
+            if(line.includes[patterns[2]]){
+                let cleanData = line.split(patterns[2])[1]
+                cleanData = "User:" + cleanData
+                res.write(cleanData + "\n")
+            }
     //   if(patterns.some(p => line.includes(p))) {
     //     res.write(line + "\n"); // envoie ligne filtrée au client
     //   }
+            res.end()
+        });
     });
-  });
-  dockerLogs.stdout.on("end", ()=>{
-    res.end()
-  })
+    dockerLogs.stdout.on("end", ()=>{
+        res.end()
+    })
   
     dockerLogs.stderr.on("data", (data) => {
-      res.write(`ERROR: ${data.toString()}\n`);
+        res.write(`ERROR: ${data.toString()}\n`);
     });
     dockerLogs.stderr.on("end", ()=>{
         res.end()
     })
     
   // Si le client ferme la connexion, on tue le processus docker logs pour éviter fuite de ressources
-  req.on("close", () => {
-    dockerLogs.kill();
-  });
+    req.on("close", () => {
+        dockerLogs.kill();
+    });
 });
 
 server.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+    console.log(`Server running on http://localhost:${port}`);
 });
