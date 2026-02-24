@@ -7,9 +7,9 @@ const dockerContainer = "avr-core-google-10";
 
 // Les patterns à filtrer
 const patterns = [
-  "Received data from external asr service",
-  "Sends text from LLM to TTS",
-  "UUID packet received"
+    "UUID packet received:",
+    "Sends text from LLM to TTS:",
+    "Received data from external asr service:",
 ];
 
 // On crée le serveur HTTP
@@ -25,9 +25,24 @@ const server = http.createServer((req, res) => {
   dockerLogs.stdout.on("data", (data) => {
     const lines = data.toString().split("\n");
     lines.forEach(line => {
-      if(patterns.some(p => line.includes(p))) {
-        res.write(line + "\n"); // envoie ligne filtrée au client
-      }
+        if(line.includes[patterns[0]]){
+            let cleanData = line.split(patterns[0])[1]
+            cleanData = "Call starting"
+            res.write(cleanData + "\n")
+        }
+        if(line.includes[patterns[1]]){
+            let cleanData = line.split(patterns[1])[1]
+            cleanData = "Bot:" + cleanData
+            res.write(cleanData + "\n")
+        }
+        if(line.includes[patterns[2]]){
+            let cleanData = line.split(patterns[2])[1]
+            cleanData = "User:" + cleanData
+            res.write(cleanData + "\n")
+        }
+    //   if(patterns.some(p => line.includes(p))) {
+    //     res.write(line + "\n"); // envoie ligne filtrée au client
+    //   }
     });
   });
   dockerLogs.stdout.on("end", ()=>{
