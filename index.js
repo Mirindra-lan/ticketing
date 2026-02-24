@@ -12,7 +12,13 @@ const patterns = [
 const serveur = http.createServer((req, res) => {
     const pythonVersion = spawn(cmd, args);
     pythonVersion.stdout.on("data", (data) => {
-        res.write(data.toString())
+        const lines = data.toString().split("\n")
+        lines.forEach(element => {
+            if(lines.includes(patterns[0]) || lines.includes(patterns[1])){
+                res.write(element+"\n")
+            }
+        });
+        // res.write(data.toString())
         res.end()
     })
     pythonVersion.stderr.on("data", (data) => {
