@@ -43,7 +43,7 @@ const server = http.createServer((req, res) => {
     //   if(patterns.some(p => line.includes(p))) {
     //     res.write(line + "\n"); // envoie ligne filtrée au client
     //   }
-            res.end()
+            // res.end()
         });
     });
     dockerLogs.stdout.on("end", ()=>{
