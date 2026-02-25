@@ -63,7 +63,6 @@ const server = http.createServer((req, res) => {
   
     dockerLogs.stderr.on("data", (data) => {
         res.write(`ERROR: ${data.toString()}\n`);
-        logger.error("blballdld")
     });
     dockerLogs.stderr.on("end", ()=>{
         res.end()
