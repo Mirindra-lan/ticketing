@@ -47,7 +47,7 @@ const server = http.createServer((req, res) => {
             }
             if(line.includes(patterns[3])){
                 console.log("\n\n" + discussion)
-                res.write("Fin de la discussion")
+                res.write("Fin de la discussion\n")
                 discussion = "\n\n"
             }
     //   if(patterns.some(p => line.includes(p))) {
