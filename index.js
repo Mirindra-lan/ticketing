@@ -6,6 +6,7 @@ const logger = require("./src/logger/logger")
 const port = process.env.PORT || 5500;
 const dockerContainer = "avr-core-google-10";
 
+let discussion = ""
 
 // Les patterns à filtrer
 const patterns = [
@@ -27,7 +28,6 @@ const server = http.createServer((req, res) => {
 
     dockerLogs.stdout.on("data", (data) => {
         const lines = data.toString().split("\n");
-        let discussion = ""
         lines.forEach(line => {
             if(line.includes([patterns[0]])){
                 let cleanData = line.split(patterns[0])[1]
@@ -47,6 +47,7 @@ const server = http.createServer((req, res) => {
                 res.write(cleanData + "\n")
             }
             if(line.includes(patterns[3])){
+                console.log(discussion)
                 logger.info(discussion)
                 res.write("Fin de la discussion\n\n")
                 discussion = ""
