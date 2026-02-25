@@ -46,9 +46,8 @@ const server = http.createServer((req, res) => {
                 res.write(cleanData + "\n")
             }
             if(line.includes(patterns[3])){
-                console.log("\n\n" + discussion)
-                res.write("Fin de la discussion\n")
-                discussion = "\n\n"
+                res.write("Fin de la discussion\n\n")
+                discussion = ""
             }
     //   if(patterns.some(p => line.includes(p))) {
     //     res.write(line + "\n"); // envoie ligne filtrée au client
