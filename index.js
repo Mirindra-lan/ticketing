@@ -1,6 +1,7 @@
 const http = require("http");
 const { spawn } = require("child_process");
 require("dotenv").config();
+const logger = require("./src/logger/logger")
 
 const port = process.env.PORT || 5500;
 const dockerContainer = "avr-core-google-10";
@@ -46,6 +47,7 @@ const server = http.createServer((req, res) => {
                 res.write(cleanData + "\n")
             }
             if(line.includes(patterns[3])){
+                logger.info(discussion)
                 res.write("Fin de la discussion\n\n")
                 discussion = ""
             }
@@ -61,6 +63,7 @@ const server = http.createServer((req, res) => {
   
     dockerLogs.stderr.on("data", (data) => {
         res.write(`ERROR: ${data.toString()}\n`);
+        logger.error("blballdld")
     });
     dockerLogs.stderr.on("end", ()=>{
         res.end()
