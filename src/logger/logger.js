@@ -20,10 +20,10 @@ if (dayOfWeek === 1) { // lundi
 // Format personnalisé
 const logFormat = printf(({ level, message, timestamp, stack }) => {
     return level.toLocaleLowerCase() == 'info' ?
-    `
-    [${timestamp}] : Nouveau discussion
-    ${message}\n
-    ` : ""
+`
+[${timestamp}] : Nouveau discussion
+${message}\n
+` : ""
 });
 
 // Création du logger
