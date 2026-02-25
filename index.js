@@ -5,11 +5,13 @@ require("dotenv").config();
 const port = process.env.PORT || 5500;
 const dockerContainer = "avr-core-google-10";
 
+
 // Les patterns à filtrer
 const patterns = [
     "UUID packet received:",
     "Sends text from LLM to TTS:",
     "Received data from external asr service:",
+    "Socket Client disconnected",
 ];
 
 // On crée le serveur HTTP
@@ -24,21 +26,28 @@ const server = http.createServer((req, res) => {
 
     dockerLogs.stdout.on("data", (data) => {
         const lines = data.toString().split("\n");
+        let discussion = ""
         lines.forEach(line => {
             if(line.includes([patterns[0]])){
                 let cleanData = line.split(patterns[0])[1]
-                cleanData = "Call starting"
+                cleanData = "Nouveau discussion"
                 res.write(cleanData + "\n")
             }
             if(line.includes([patterns[1]])){
                 let cleanData = line.split(patterns[1])[1]
                 cleanData = "Bot:" + cleanData
+                discussion = discussion + cleanData + "\n"
                 res.write(cleanData + "\n")
             }
             if(line.includes([patterns[2]])){
                 let cleanData = line.split(patterns[2])[1]
                 cleanData = "User:" + cleanData
+                discussion = discussion + cleanData + "\n"
                 res.write(cleanData + "\n")
+            }
+            if(line.includes(patterns[3])){
+                console.log("\n\n" + discussion)
+                discussion = ""
             }
     //   if(patterns.some(p => line.includes(p))) {
     //     res.write(line + "\n"); // envoie ligne filtrée au client
