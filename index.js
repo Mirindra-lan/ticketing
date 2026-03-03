@@ -35,33 +35,33 @@ const server = http.createServer((req, res) => {
                 let date = cleanData[0]
                 discussions[uuidd] = ""
                 cleanData = date + " : Nouvelle discussion"
-                discussions[uuidd] = discussions[uuidd] + cleanData + "\n"
+                discussions[uuidd] += cleanData + "\n"
                 res.write(cleanData + "\n")
             }
             if(line.includes([patterns[1]])){
                 let cleanData = line.split(patterns[1])
-                let uuid = cleanData[0].slice(29, 29+36)
+                let uuidd = cleanData[0].slice(29, 29+36)
                 let mes = cleanData[1]
                 cleanData = "Bot:" + mes
-                if(discussions[uuid]) {
-                    discussions[uuid] = discussions[uuid] + cleanData + "\n"
+                if(discussions[uuidd]) {
+                    discussions[uuidd] += cleanData + "\n"
                 }
                 res.write(cleanData + "\n")
             }
             if(line.includes([patterns[2]])){
                 let cleanData = line.split(patterns[2])
-                let uuid = cleanData[0].slice(29, 29+36)
+                let uuidd = cleanData[0].slice(29, 29+36)
                 let mes = cleanData[1]
                 cleanData = "User:" + mes
-                if(discussions[uuid]) {
-                    discussions[uuid] = discussions[uuid] + cleanData + "\n"
+                if(discussions[uuidd]) {
+                    discussions[uuidd] += cleanData + "\n"
                 }
                 res.write(cleanData + "\n")
             }
             if(line.includes(patterns[3])){
-                let uuid = line.slice(29, 29+36)
-                console.log(discussions[uuid])
-                logger.info(discussions[uuid])
+                let uuidd = line.slice(29, 29+36)
+                console.log(discussions[uuidd])
+                logger.info(discussions[uuidd])
                 res.write("Fin de la discussion\n\n")
             }
         });

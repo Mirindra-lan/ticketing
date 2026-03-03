@@ -21,7 +21,7 @@ if (dayOfWeek === 1) { // lundi
 // Format personnalisé
 const logFormat = printf(({ level, message, timestamp, stack }) => {
   if (level.toLowerCase() === "info") {
-    return `[${timestamp}]\n${message}\n`;
+    return `${message}\n`;
   } else if (level.toLowerCase() === "error") {
     return `[${timestamp}] 🚨 ERROR\n${stack || message}\n`;
   } else {
