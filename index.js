@@ -44,7 +44,7 @@ const server = http.createServer((req, res) => {
                 let mes = cleanData[1]
                 cleanData = "Bot:" + mes
                 if(discussions[uuid]) {
-                    discussions[uuid] + cleanData + "\n"
+                    discussions[uuidd] = discussions[uuid] + cleanData + "\n"
                 }
                 res.write(cleanData + "\n")
             }
@@ -54,7 +54,7 @@ const server = http.createServer((req, res) => {
                 let mes = cleanData[1]
                 cleanData = "User:" + mes
                 if(discussions[uuid]) {
-                    discussions[uuid] + cleanData + "\n"
+                    discussions[uuidd] = discussions[uuid] + cleanData + "\n"
                 }
                 res.write(cleanData + "\n")
             }
