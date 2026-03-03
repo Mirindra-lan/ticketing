@@ -6,13 +6,13 @@ const logger = require("./src/logger/logger")
 const port = process.env.PORT || 5500;
 const dockerContainer = "avr-core-google-10";
 
-let discussion = ""
+const discussions = {}
 
 // Les patterns à filtrer
 const patterns = [
-    "UUID packet received:",
-    "Sends text from LLM to TTS:",
-    "Received data from external asr service:",
+    " [INFO]: UUID packet received: ",
+    " Sends text from LLM to TTS: ",
+    " Received data from external asr service: ",
     "Socket Client disconnected",
 ];
 
@@ -30,32 +30,40 @@ const server = http.createServer((req, res) => {
         const lines = data.toString().split("\n");
         lines.forEach(line => {
             if(line.includes([patterns[0]])){
-                let cleanData = line.split(patterns[0])[1]
-                cleanData = "Nouveau discussion"
+                let cleanData = line.split(patterns[0])
+                let uuidd = cleanData[1]
+                let date = cleanData[0]
+                discussions[uuidd] = ""
+                cleanData = date + " : Nouvelle discussion"
+                discussions[uuidd] = discussions[uuidd] + cleanData + "\n"
                 res.write(cleanData + "\n")
             }
             if(line.includes([patterns[1]])){
-                let cleanData = line.split(patterns[1])[1]
-                cleanData = "Bot:" + cleanData
-                discussion = discussion + cleanData + "\n"
+                let cleanData = line.split(patterns[1])
+                let uuid = cleanData[0].slice(29, 29+36)
+                let mes = cleanData[1]
+                cleanData = "Bot:" + mes
+                if(discussions[uuid]) {
+                    discussions[uuid] + cleanData + "\n"
+                }
                 res.write(cleanData + "\n")
             }
             if(line.includes([patterns[2]])){
-                let cleanData = line.split(patterns[2])[1]
-                cleanData = "User:" + cleanData
-                discussion = discussion + cleanData + "\n"
+                let cleanData = line.split(patterns[2])
+                let uuid = cleanData[0].slice(29, 29+36)
+                let mes = cleanData[1]
+                cleanData = "Bot:" + mes
+                if(discussions[uuid]) {
+                    discussions[uuid] + cleanData + "\n"
+                }
                 res.write(cleanData + "\n")
             }
             if(line.includes(patterns[3])){
-                console.log(discussion)
-                logger.info(discussion)
+                let uuid = line.slice(29, 29+36)
+                console.log(discussions[uuid])
+                logger.info(discussions[uuid])
                 res.write("Fin de la discussion\n\n")
-                discussion = ""
             }
-    //   if(patterns.some(p => line.includes(p))) {
-    //     res.write(line + "\n"); // envoie ligne filtrée au client
-    //   }
-            // res.end()
         });
     });
     dockerLogs.stdout.on("end", ()=>{
@@ -78,3 +86,5 @@ const server = http.createServer((req, res) => {
 server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
+
+//2026-03-03 08:18:59 [INFO]: [550e8400-e29b-41d4-a716-446655440000]
