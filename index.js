@@ -52,7 +52,7 @@ const server = http.createServer((req, res) => {
                 let cleanData = line.split(patterns[2])
                 let uuid = cleanData[0].slice(29, 29+36)
                 let mes = cleanData[1]
-                cleanData = "Bot:" + mes
+                cleanData = "User:" + mes
                 if(discussions[uuid]) {
                     discussions[uuid] + cleanData + "\n"
                 }
