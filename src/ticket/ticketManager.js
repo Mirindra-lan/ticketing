@@ -63,7 +63,6 @@ class TicketManager{
         await this.verifyToken();
         try {
             const res = await this.api.get(`/Assistance/Ticket/${id}`)
-            console.log(res.data)
             return res.data
         } catch (error) {
             console.log(error)
@@ -86,7 +85,9 @@ class TicketManager{
     
     async create(ticket) {
         await this.verifyToken();
+
         const tic = new Ticket(ticket);
+        
         const data = new FormData();
         data.append("name", tic.getName());
         data.append("content", tic.getContent());
@@ -96,6 +97,7 @@ class TicketManager{
         data.append("category", tic.getCategory());
         data.append("location", tic.getLocation());
         data.append("request_type", 1);
+        
         try {
             const res = await this.api.post("/Assistance/Ticket", data, {
 				headers: {"Content-Type": "multipart/formdata"}
