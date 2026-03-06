@@ -66,7 +66,7 @@ const server = http.createServer((req, res) => {
                 let uuidd = line.slice(29, 29+36)
                 console.log(discussions[uuidd])
                 logger.info(discussions[uuidd])
-                llm.sendChatLlm(discussions[uuid]).then((v) => {
+                llm.sendChatLlm(discussions[uuidd]).then((v) => {
                     const dd = v;
                     if(dd) {
                         const manager = new TicketManager()
