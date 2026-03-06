@@ -1,7 +1,6 @@
 const axios = require("axios")
-const {config} = require("dotenv");
+const Ticket = require("./ticket")
 
-config()
 
 class TicketManager{
     constructor() {
@@ -48,7 +47,11 @@ class TicketManager{
     async getTickets() {
         await this.verifyToken();
         try {
-            const res = await this.api.get("/Assistance/Ticket")
+            const res = await this.api.get("/Assistance/Ticket", {
+                params: {
+                    limit: 3
+                }
+            })
             console.log(res.data)
             return res.data
         } catch (error) {
@@ -83,9 +86,19 @@ class TicketManager{
     
     async create(ticket) {
         await this.verifyToken();
+        const tic = new Ticket(ticket);
+        const data = new FormData();
+        data.append("name", tic.getName());
+        data.append("content", tic.getContent());
+        data.append("urgency", tic.getUrgency());
+        data.append("impact", tic.getImpact());
+        data.append("type", 1);
+        data.append("category", tic.getCategory());
+        data.append("location", tic.getLocation());
+        data.append("request_type", 1);
         try {
-            const res = await this.api.post("/Assistance/Ticket", ticket, {
-				headers: {"Content-Type": "application/json"}
+            const res = await this.api.post("/Assistance/Ticket", data, {
+				headers: {"Content-Type": "multipart/formdata"}
 			})
             console.log(res.data)
             return res.data
@@ -115,39 +128,4 @@ class TicketManager{
 	}
 }
 
-const ticket = {
-	input: {name: "Problème de clavier",
-	content: "certains touches ne fonctionnent pas depuis ce matin",
-	user_recipient: {id: 1251},
-	category: {id: 12},
-	location: {id: 23},
-	urgency: 2,
-	impact: 3,
-	type: 1,
-	status: {id: 1}
-}}
-
-const manager = new TicketManager();
-// manager.create(ticket).then((value) => {
-// 	let id = value.id;
-// 	manager.getTicket(id).then((value) => {
-// 		console.log(value)
-// 	}).catch((error) => {
-// 		console.log(error)
-// 	})
-// 	manager.delete(id).then((value) => {
-// 		console.log(value)
-// 	}).catch((error) => {
-// 		console.log(error)
-// 	})
-// 	console.log(value);
-// }).catch((error) => {
-// 	console.log(error);
-// })
-// manager.createWithFetch(ticket)
-manager.getTicket(3639).then(value => {
-	console.log(value)
-})
-manager.delete(3639).then(value => {
-	console.log("deleted")
-})
+module.exports = TicketManager

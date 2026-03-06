@@ -1,57 +1,29 @@
 class Ticket {
-    constructor(name, content, userid) {
-        this._name = name || "";
-        this._content = content || "";
-        this._userid = userid || "";
-        this._type = "ticket";
+    constructor(ticketJson) {
+        this.name = ticketJson.name;
+        this.content = ticketJson.content;
+        this.impact = ticketJson.impact;
+        this.urgency = ticketJson.urgency;
+        this.location = ticketJson.location;
+        this.category = ticketJson.category;
     }
-
-    get name() {
-        return this._name;
+    getName() {
+        return this.name;
     }
-
-    get content() {
-        return this._content;
+    getContent() {
+        return this.content;
     }
-
-    get userid() {
-        return this._userid;
+    getImpact() {
+        return this.impact;
     }
-
-    get type() {
-        return this._type;
+    getUrgency() {
+        return this.urgency;
     }
-
-    set name(value) {
-        this._name = value;
+    getLocation() {
+        return this.location;
     }
-
-    set content(value) {
-        this._content = value;
-    }
-
-    set userid(value) {
-        this._userid = value;
-    }
-
-    toJSON() {
-        return {
-            input: {
-                name: this._name,
-                content: this._content,
-                type: this._type,
-                users_id_requester: this._userid.toString()
-            }
-        };
-    }
-
-    fromJSON(json) {
-        if (json.input) {
-            this._name = json.input.name || "";
-            this._content = json.input.content || "";
-            this._userid = json.input.users_id_requester || "";
-            this._type = json.input.type || "ticket";
-        }
+    getCategory() {
+        return this.category;
     }
 }
 
