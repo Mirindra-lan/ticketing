@@ -32,7 +32,7 @@ const server = http.createServer((req, res) => {
 
     dockerLogs.stdout.on("data", (data) => {
         const lines = data.toString().split("\n");
-        lines.forEach(async line => {
+        lines.forEach( line => {
             if(line.includes([patterns[0]])){
                 let cleanData = line.split(patterns[0])
                 let uuidd = cleanData[1]
@@ -66,12 +66,20 @@ const server = http.createServer((req, res) => {
                 let uuidd = line.slice(29, 29+36)
                 console.log(discussions[uuidd])
                 logger.info(discussions[uuidd])
-                const ticket = await llm.sendChatLlm(discussions[uuidd]);
-                const resultat = await manager.create(ticket);
-                if(resultat.id) {
-                    await manager.getTicket(resultat.id);
-                    await manager.delete(resultat.id);
-                }
+                llm.sendChatLlm(discussions[uuid]).then((value) => {
+                    if(value) {
+                        manager.create(value).then((ticket) => {
+                            if(ticket.id) {
+                                manager.getTicket(ticket.id).then((newtic) => {
+                                    console.log(newtic)
+                                })
+                                manager.delete(ticket.id).then((v) => {
+                                    console.log(v);
+                                })
+                            }
+                        })
+                    }
+                })
                 res.write("Fin de la discussion\n\n")
             }
         });
