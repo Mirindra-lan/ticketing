@@ -23,7 +23,7 @@ class LLM {
                 messages: this.conversation,
                 temperature: 0.1
             });
-            return res.data.choices[0].message
+            return res.data.choices[0].message["content"]
         } catch(error) {
             if(error.response) {
                 console.log("Erreur API: ", error.response.data);

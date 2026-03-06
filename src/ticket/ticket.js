@@ -1,11 +1,14 @@
 class Ticket {
-    constructor(ticketJson) {
-        this.name = ticketJson.name;
-        this.content = ticketJson.content;
-        this.impact = ticketJson.impact;
-        this.urgency = ticketJson.urgency;
-        this.location = ticketJson.location;
-        this.category = ticketJson.category;
+    constructor(ticket) {
+        const ticketJson = this.jsonParser(ticket)
+        if(ticketJson) {
+            this.name = ticketJson.name;
+            this.content = ticketJson.content;
+            this.impact = ticketJson.impact;
+            this.urgency = ticketJson.urgency;
+            this.location = ticketJson.location;
+            this.category = ticketJson.category;
+        }
     }
     getName() {
         return this.name;
@@ -24,6 +27,14 @@ class Ticket {
     }
     getCategory() {
         return this.category;
+    }
+    jsonParser(str) {
+        try {
+            const data = JSON.parse(str)
+            return data
+        } catch(er) {
+            return null
+        }
     }
 }
 

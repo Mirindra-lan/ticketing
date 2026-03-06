@@ -1,7 +1,9 @@
 const http = require("http");
 const { spawn } = require("child_process");
 require("dotenv").config();
-const logger = require("./src/logger/logger")
+const logger = require("./src/logger/logger");
+const TicketManager = require("./src/ticket/ticketManager");
+const Llm = require("./src/llm/llm")
 
 const port = process.env.PORT || 5500;
 const dockerContainer = "avr-core-google-10";
@@ -25,10 +27,12 @@ const server = http.createServer((req, res) => {
 
   // On spawn docker logs en streaming pour ce client
     const dockerLogs = spawn("docker", ["logs", "-f", dockerContainer]);
+    const manager = new TicketManager();
+    const llm = new Llm();
 
     dockerLogs.stdout.on("data", (data) => {
         const lines = data.toString().split("\n");
-        lines.forEach(line => {
+        lines.forEach(async line => {
             if(line.includes([patterns[0]])){
                 let cleanData = line.split(patterns[0])
                 let uuidd = cleanData[1]
@@ -62,6 +66,12 @@ const server = http.createServer((req, res) => {
                 let uuidd = line.slice(29, 29+36)
                 console.log(discussions[uuidd])
                 logger.info(discussions[uuidd])
+                const ticket = await llm.sendChatLlm(discussions[uuidd]);
+                const resultat = await manager.create(ticket);
+                if(resultat.id) {
+                    await manager.getTicket(resultat.id);
+                    await manager.delete(resultat.id);
+                }
                 res.write("Fin de la discussion\n\n")
             }
         });

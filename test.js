@@ -54,7 +54,7 @@ Bot:À très vite, Luc !
 Fin de la discussion
 `
 llm.sendChatLlm(disc).then((value) => {
-    const dd = jsonParser(value["content"])
+    const dd = value;
     if(dd) {
         const manager = new TicketManager()
         manager.create(dd).then(value => {
@@ -69,12 +69,3 @@ llm.sendChatLlm(disc).then((value) => {
         })
     }
 })
-
-function jsonParser(str) {
-    try {
-        const data = JSON.parse(str)
-        return data
-    } catch(er) {
-        return null
-    }
-}
