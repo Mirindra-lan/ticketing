@@ -74,7 +74,7 @@ const server = http.createServer((req, res) => {
                         const manager = new TicketManager()
                         manager.create(dd).then(value => {
                             logger.info("\n", value)
-                            if(value != null) {
+                            if(value) {
                                 manager.getTicket(value.id).then(valu => {
                                     console.log(valu)
                                 })

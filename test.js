@@ -1,6 +1,7 @@
 const LLM = require("./src/llm/llm")
 const TicketManager = require("./src/ticket/ticketManager")
 const {config} = require("dotenv");
+const Ticket = require("./src/ticket/ticket")
 
 config()
 
@@ -53,17 +54,24 @@ Bot:Un technicien va te rappeler dans la journée, et je te tiens au courant si 
 Bot:À très vite, Luc !
 Fin de la discussion
 `
-llm.sendChatLlm(disc).then((value) => {
+const dixx = `
+bot: Bonjour ! En quoi puis-je vous assister aujourd'hui ?
+user: Bonjour, je travaille dans le site Setex1, au sous-sol, dans le service technique. Je m'appelle Luc.
+bot: Enchanté Luc ! Merci pour ces informations.`
+
+llm.sendChatLlm(dixx).then((value) => {
     const dd = value;
     if(dd) {
         const manager = new TicketManager()
         manager.create(dd).then(value => {
-            manager.getTicket(value.id).then(valu => {
-                console.log(valu)
-            })
-            manager.delete(value.id).then(val=>{
-                console.log(val)
-            })
+            if(value) {
+                manager.getTicket(value.id).then(valu => {
+                    console.log(valu)
+                })
+                manager.delete(value.id).then(val=>{
+                    console.log(val)
+                })
+            }
         }).catch((err) => {
             console.log("error: ", err)
         })
