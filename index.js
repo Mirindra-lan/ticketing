@@ -68,6 +68,7 @@ const server = http.createServer((req, res) => {
                 logger.info(discussions[uuidd])
                 llm.sendChatLlm(discussions[uuidd]).then((v) => {
                     const dd = v;
+                    console.log(dd)
                     if(dd) {
                         const manager = new TicketManager()
                         manager.create(dd).then(value => {
