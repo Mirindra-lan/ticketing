@@ -3,7 +3,8 @@ const { spawn } = require("child_process");
 require("dotenv").config();
 const logger = require("./src/logger/logger");
 const TicketManager = require("./src/ticket/ticketManager");
-const Llm = require("./src/llm/llm")
+const Llm = require("./src/llm/llm");
+const { cp } = require("fs");
 
 const port = process.env.PORT || 5500;
 const dockerContainer = "avr-core-google-10";
@@ -75,6 +76,9 @@ const server = http.createServer((req, res) => {
                             if(value != null) {
                                 manager.getTicket(value.id).then(valu => {
                                     console.log(valu)
+                                })
+                                manager.delete(value.id).then(vv => {
+                                    console.log("supprimé")
                                 })
                             }
                         }).catch((err) => {
