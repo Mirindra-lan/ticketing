@@ -71,9 +71,11 @@ const server = http.createServer((req, res) => {
                     if(dd) {
                         const manager = new TicketManager()
                         manager.create(dd).then(value => {
-                            manager.getTicket(value.id).then(valu => {
-                                console.log(valu)
-                            })
+                            if(value) {
+                                manager.getTicket(value.id).then(valu => {
+                                    console.log(valu)
+                                })
+                            }
                         }).catch((err) => {
                             console.log("error: ", err)
                         })
