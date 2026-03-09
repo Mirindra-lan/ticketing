@@ -97,10 +97,10 @@ class TicketManager{
         data.append("category", tic.getCategory());
         data.append("location", tic.getLocation());
         data.append("request_type", 1);
-        // if(tic.category == 0){
-        //     console.log("Aucun problème mentionné ou aucune demande d'insistance")
-        //     return null
-        // }
+        if(tic.category == 0){
+            console.log("Aucun problème mentionné ou aucune demande d'insistance")
+            return null
+        }
         try {
             const res = await this.api.post("/Assistance/Ticket", data, {
                 headers: {"Content-Type": "multipart/formdata"}
