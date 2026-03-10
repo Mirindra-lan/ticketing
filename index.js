@@ -78,9 +78,6 @@ const server = http.createServer((req, res) => {
                                 manager.getTicket(value.id).then(valu => {
                                     console.log(valu)
                                 })
-                                manager.delete(value.id).then(vv => {
-                                    console.log("supprimé")
-                                })
                             }
                         }).catch((err) => {
                             console.log("error: ", err)
