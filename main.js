@@ -45,23 +45,23 @@ function filterLogs(data) {
         if(line.includes(patterns[3])){
             let uuidd = line.slice(29, 29+36)
             logger.info(discussions[uuidd])
-            llm.sendChatLlm(discussions[uuidd]).then((v) => {
-                const dd = v;
-                console.log(dd)
-                if(dd) {
-                    const manager = new TicketManager()
-                    manager.create(dd).then(value => {
-                        logger.info("\n", value)
-                        if(value) {
-                            manager.getTicket(value.id).then(valu => {
-                                console.log(valu)
-                            })
-                        }
-                    }).catch((err) => {
-                        console.log("error: ", err)
-                    })
-                }
-            })
+            // llm.sendChatLlm(discussions[uuidd]).then((v) => {
+            //     const dd = v;
+            //     console.log(dd)
+            //     if(dd) {
+            //         const manager = new TicketManager()
+            //         manager.create(dd).then(value => {
+            //             logger.info("\n", value)
+            //             if(value) {
+            //                 manager.getTicket(value.id).then(valu => {
+            //                     console.log(valu)
+            //                 })
+            //             }
+            //         }).catch((err) => {
+            //             console.log("error: ", err)
+            //         })
+            //     }
+            // })
             console.log("Fin de la discussion\n\n")
         }
     });
