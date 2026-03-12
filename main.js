@@ -2,7 +2,7 @@ const { spawn } = require("child_process")
 const logger = require("./src/logger/logger")
 const Llm = require("./src/llm/llm")
 const TicketManager = require("./src/ticket/ticketManager")
-
+require("dotenv").config()
 const dockerContainer = "avr-core-google-10";
 const discussions = {}
 const patterns = [
@@ -16,8 +16,8 @@ const manager = new TicketManager()
 
 function createTicket(discussion) {
     llm.sendChatLlm(discussion).then(v => {
-        if(dd) {
-            manager.create(dd).then(value =>{
+        if(v) {
+            manager.create(v).then(value =>{
                 if(value?.id) {
                     manager.getTicket(value.id).then(val => {
                         console.log("\nNew ticket created:\n", val)
