@@ -1,5 +1,7 @@
 const { spawn } = require("child_process")
 const logger = require("./src/logger/logger")
+const Llm = require("./src/llm/llm")
+const TicketManager = require("./src/ticket/ticketManager")
 
 const dockerContainer = "avr-core-google-10";
 const discussions = {}
@@ -9,7 +11,26 @@ const patterns = [
     " Received data from external asr service: ",
     "Socket Client disconnected",
 ];
+const llm = new Llm()
+const manager = new TicketManager()
 
+function createTicket(discussion) {
+    llm.sendChatLlm(discussion).then(v => {
+        if(dd) {
+            manager.create(dd).then(value =>{
+                if(value?.id) {
+                    manager.getTicket(value.id).then(val => {
+                        console.log("\nNew ticket created:\n", val)
+                    })
+                }
+            }).catch((reason) => {
+                console.log("Ticket not created")
+            })
+        }
+    }).catch((reason) => {
+        console.log("Maybe LLM service is not avalaible")
+    })
+}
 function filterLogs(data) {
     const lines = data.toString().split("\n");
     lines.forEach( line => {
@@ -45,23 +66,7 @@ function filterLogs(data) {
         if(line.includes(patterns[3])){
             let uuidd = line.slice(29, 29+36)
             logger.info(discussions[uuidd])
-            // llm.sendChatLlm(discussions[uuidd]).then((v) => {
-            //     const dd = v;
-            //     console.log(dd)
-            //     if(dd) {
-            //         const manager = new TicketManager()
-            //         manager.create(dd).then(value => {
-            //             logger.info("\n", value)
-            //             if(value) {
-            //                 manager.getTicket(value.id).then(valu => {
-            //                     console.log(valu)
-            //                 })
-            //             }
-            //         }).catch((err) => {
-            //             console.log("error: ", err)
-            //         })
-            //     }
-            // })
+            createTicket(discussions[uuidd])
             console.log("Fin de la discussion\n\n")
         }
     });
