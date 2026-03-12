@@ -26,7 +26,7 @@ const server = http.createServer((req, res) => {
     });
 
   // On spawn docker logs en streaming pour ce client
-    const dockerLogs = spawn("docker", ["logs", "-f", dockerContainer]);
+    const dockerLogs = spawn("docker", ["logs", "-f", "--since=1s", dockerContainer]);
     const manager = new TicketManager();
     const llm = new Llm();
 
