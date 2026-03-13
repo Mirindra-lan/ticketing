@@ -29,8 +29,17 @@ class Ticket {
         return this.category;
     }
     jsonParser(str) {
+        const openIndex = str.lastIndexOf("{")
+        const closeIndex = str.indexOf("}")
+        let cleanJson = ""
+        if(openIndex != -1 && closeIndex != -1) {
+            cleanJson = str.slice(openIndex, closeIndex + 1)
+        }
+        if(!cleanJson) {
+            return null
+        }
         try {
-            const data = JSON.parse(str)
+            const data = JSON.parse(cleanJson)
             return data
         } catch(er) {
             return null

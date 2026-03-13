@@ -55,7 +55,7 @@ class TicketManager{
             console.log(res.data)
             return res.data
         } catch (error) {
-            console.log(error)
+            console.log("No ticket found")
             return null
         }
     }
@@ -65,7 +65,7 @@ class TicketManager{
             const res = await this.api.get(`/Assistance/Ticket/${id}`)
             return res.data
         } catch (error) {
-            console.log(error)
+            console.log("No ticket found")
             return null
         }
     }
@@ -74,20 +74,21 @@ class TicketManager{
         await this.verifyToken();
         try {
             const res = await this.api.delete(`/Assistance/Ticket/${id}`)
-            console.log(res.data)
+            console.log("Ticket deleted")
             return res.data
         } catch (error) {
-            console.log(error)
+            console.log("Error: not deleted")
             return null
         }
     }
-
     
     async create(ticket) {
         await this.verifyToken();
 
         const tic = new Ticket(ticket);
-        
+        if(!tic.name && !tic.category) {
+            return null
+        }
         const data = new FormData();
         data.append("name", tic.getName());
         data.append("content", tic.getContent());
@@ -105,10 +106,10 @@ class TicketManager{
             const res = await this.api.post("/Assistance/Ticket", data, {
                 headers: {"Content-Type": "multipart/formdata"}
             })
-            console.log(res.data)
+            console.log("Ticket created: ", res.data)
             return res.data
         } catch (error) {
-            console.log(error)
+            console.log("Error: not created")
             return null
         }
         

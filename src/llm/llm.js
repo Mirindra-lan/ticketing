@@ -30,7 +30,7 @@ class LLM {
             } else if (error.request) {
                 console.log("Aucune reponse serveur");
             } else  {
-                console.log("Erreur: ", error.message)
+                console.log("Erreur: ", error.response.message)
             }
         }
     }
